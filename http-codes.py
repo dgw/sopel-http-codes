@@ -44,8 +44,8 @@ def fetch_result(query):
         return "HTTP error: " + e.message
 
     page = etree.HTML(r.content)
-    title = bleach.clean(etree.tostring(page.xpath('/html/body/article/h1[1]')[0]), tags=[], strip=True)
+    title = bleach.clean(etree.tostring(page.xpath('/html/body/article/h1[1]')[0], encoding='unicode'), tags=[], strip=True)
     summary = bleach.clean(
-        re.sub('<a href="#ref-\d+">.*?<\/a>', '', etree.tostring(page.xpath('/html/body/article/p[1]')[0])), tags=[],
+        re.sub('<a href="#ref-\d+">.*?<\/a>', '', etree.tostring(page.xpath('/html/body/article/p[1]')[0], encoding='unicode')), tags=[],
         strip=True)
     return "{title}: {summary} — {link}".format(title=title, summary=summary, link=url)
