@@ -25,7 +25,7 @@ def http_code(bot, trigger):
 def fetch_result(query):
     if not query:
         return "You must provide a HTTP status code to look up."
-    if not re.match('^[1-5]\d{2}$', query):
+    if not re.match('^[1-5]\\d{2}$', query):
         return "Invalid HTTP status code: %s" % query
     url = api_url % query
     try:
@@ -46,6 +46,6 @@ def fetch_result(query):
     page = etree.HTML(r.content)
     title = bleach.clean(etree.tostring(page.xpath('/html/body/article/h1[1]')[0], encoding='unicode'), tags=[], strip=True)
     summary = bleach.clean(
-        re.sub('<a href="#ref-\d+">.*?<\/a>', '', etree.tostring(page.xpath('/html/body/article/p[1]')[0], encoding='unicode')), tags=[],
+        re.sub('<a href="#ref-\\d+">.*?<\\/a>', '', etree.tostring(page.xpath('/html/body/article/p[1]')[0], encoding='unicode')), tags=[],
         strip=True)
     return "{title}: {summary} — {link}".format(title=title, summary=summary, link=url)
