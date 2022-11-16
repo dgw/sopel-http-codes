@@ -1,15 +1,13 @@
 # sopel-http-codes
-Sopel module that fetches HTTP status codes' descriptions from `httpstatuses.com`
+Sopel plugin to look up standard HTTP status codes
 
 
 ## Requirements
-The module uses HTML scraping, not an API (as httpstatuses has none). Therefore it
-requires the following dependencies:
+This plugin is written for:
 
-* `re` (part of Python's standard library)
-* `requests` (really should be in standard Python library)
-* `lxml` (XML/HTML parsing)
-* `bleach` (HTML sanitization)
+* Python 3.5+
+* Sopel 7.1+
+
 
 ## Usage
 Commands & arguments:
@@ -17,6 +15,5 @@ Commands & arguments:
 * `.http <code>`
   * `<code>`: the HTTP status code to look up
 
-Returns the official name of the status code, and the main description snippet
-from httpstatuses indicating in more detail what it's used for.
-
+Returns the name of the status code and a brief description of its purpose
+from Python's `http` module.
