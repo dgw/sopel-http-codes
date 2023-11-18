@@ -1,26 +1,19 @@
-# -*- coding: UTF-8 -*-
 """
 http-codes.py - HTTP status code lookup module for Sopel
-Copyright 2016-2022, dgw
+
+Copyright 2016-2023, dgw
+Portions based on code by SnoopJ, used with permission.
+
 Licensed under the GPL v3.0 or later
 """
+from __future__ import annotations
+
 # Python 3.5+ required
-import http
-import re
+from http import HTTPStatus
+import random
 
 # Sopel 7.1+ required
 from sopel import plugin
-
-
-def setup(bot):
-    bot.memory['http_codes_map'] = {code.value: code.name for code in http.HTTPStatus}
-
-
-def shutdown(bot):
-    try:
-        del bot.memory['http_codes_map']
-    except KeyError:
-        pass
 
 
 @plugin.command('http')
@@ -28,19 +21,22 @@ def shutdown(bot):
 @plugin.output_prefix('[http-codes] ')
 def http_code(bot, trigger):
     try:
-        query = int(trigger.group(3))
+        status = HTTPStatus(int(trigger.group(3)))
     except ValueError:
-        bot.reply("That doesn't seem to be a valid number.")
+        bot.reply(
+            "{} doesn't seem to be a valid HTTP status code."
+            .format(trigger.group(3))
+        )
         return
 
-    mapping = bot.memory['http_codes_map']
+    desc = status.description
+    if desc and not desc.endswith('.'):
+        # stdlib is frustratingly inconsistent about punctuating the description
+        desc += '.'
 
-    if query not in mapping:
-        bot.reply("I don't recognize that status code.")
-        return
-
-    code = getattr(http.HTTPStatus, mapping[query])
-
-    bot.say("HTTP {code} {title}: {summary}".format(
-        code=code.value, title=code.phrase, summary=code.description
+    bot.say("HTTP {code} — {title}{summary} https://http.{animal}/{code}.jpg".format(
+        code=status.value,
+        title=status.phrase,
+        summary=(': ' + desc if desc else '.'),
+        animal=random.choice(('cat', 'dog')),
     ))
