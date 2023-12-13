@@ -20,12 +20,27 @@ from sopel import plugin
 @plugin.example('.http 418')
 @plugin.output_prefix('[http-codes] ')
 def http_code(bot, trigger):
+    status = trigger.group(3)
+
     try:
-        status = HTTPStatus(int(trigger.group(3)))
+        if not status:
+            raise ValueError("Empty argument.")
+        if len(status) != 3:
+            raise ValueError("Incorrect length.")
+        status = int(trigger.group(3))
     except ValueError:
         bot.reply(
-            "{} doesn't seem to be a valid HTTP status code."
-            .format(trigger.group(3))
+            "{} is clearly not a valid HTTP status code."
+            .format(status)
+        )
+        return
+
+    try:
+        status = HTTPStatus(status)
+    except ValueError:
+        bot.reply(
+            "{} seems not to be a known HTTP status code."
+            .format(status)
         )
         return
 
