@@ -1,10 +1,11 @@
-"""
-http-codes.py - HTTP status code lookup module for Sopel
+"""sopel-http-codes
 
-Copyright 2016-2023, dgw
-Portions based on code by SnoopJ, used with permission.
+Sopel plugin to look up standard HTTP status codes.
 
-Licensed under the GPL v3.0 or later
+Copyright 2016-2024, dgw
+Portions based on code by SnoopJ.
+
+Licensed under the Eiffel Forum License 2.
 """
 from __future__ import annotations
 
